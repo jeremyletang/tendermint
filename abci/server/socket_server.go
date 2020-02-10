@@ -148,15 +148,6 @@ func (s *SocketServer) handleRequests(closeConn chan error, conn io.Reader, resp
 	var count int
 	var bufReader = bufio.NewReader(conn)
 
-	defer func() {
-		// make sure to recover from any app-related panics to allow proper socket cleanup
-		r := recover()
-		if r != nil {
-			closeConn <- fmt.Errorf("recovered from panic: %v", r)
-			s.appMtx.Unlock()
-		}
-	}()
-
 	for {
 
 		var req = &types.Request{}
